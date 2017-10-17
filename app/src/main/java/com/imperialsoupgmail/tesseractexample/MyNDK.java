@@ -9,5 +9,5 @@ public class MyNDK {
         System.loadLibrary("native-lib");
     }
 
-    public native void getMyString();
+    public native static int converGray(long matAddrRgba, long matAddrGray);
 }
