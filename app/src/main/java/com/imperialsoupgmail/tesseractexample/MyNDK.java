@@ -6,7 +6,7 @@ package com.imperialsoupgmail.tesseractexample;
 
 public class MyNDK {
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("MyOpencvLibs");
     }
 
     public native static int converGray(long matAddrRgba, long matAddrGray);
