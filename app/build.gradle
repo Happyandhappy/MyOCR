@@ -10,6 +10,14 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        ndk{
+            moduleName ="native-lib"
+        }
+        sourceSets.main{
+            jni.srcDirs = []
+            jniLibs.srcDirs "src/main/libs"
+        }
     }
     buildTypes {
         release {

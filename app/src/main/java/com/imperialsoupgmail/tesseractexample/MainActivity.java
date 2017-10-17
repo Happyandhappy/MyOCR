@@ -19,7 +19,9 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Debug;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     String datapath = "";
     ImageView imageView;
     TextView detect_text_button;
+
+
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
