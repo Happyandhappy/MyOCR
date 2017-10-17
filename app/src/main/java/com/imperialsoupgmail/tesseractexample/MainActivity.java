@@ -17,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Debug;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -36,7 +37,10 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
@@ -46,6 +50,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.GaussianBlur;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
@@ -158,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Tesss func;
                 processImage();
+                convertBinary(image);
             }
         } catch (Exception e) {
             Toast.makeText(this, "Please try again", Toast.LENGTH_LONG).show();
@@ -237,4 +244,6 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawBitmap(bitmap, m, new Paint());
         return output;
     }
+
+
 }
