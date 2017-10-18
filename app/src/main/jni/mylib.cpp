@@ -33,12 +33,10 @@ JNIEXPORT jint JNICALL Java_com_imperialsoupgmail_tesseractexample_MainActivity_
 
         Mat & mRgba=*(Mat*)addRgba;
         Mat & mGray=*(Mat *)addGray;
-
        int conv;
        jint retVal;
-
        conv=toGray(mRgba,mGray);
-
+       mRgba.release();
         retVal=(jint)conv;
      return retVal;
 }

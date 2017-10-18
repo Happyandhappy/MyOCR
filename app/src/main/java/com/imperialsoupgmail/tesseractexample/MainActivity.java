@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     Button detect_text_button;
 
-    Mat mat=new Mat();
     static {
         System.loadLibrary("native");
     }
@@ -229,9 +228,11 @@ public class MainActivity extends AppCompatActivity {
         Mat src = new Mat();
         Mat dst = new Mat();
         Utils.bitmapToMat(image,src);
-        Utils.bitmapToMat(image,dst);
+        //Utils.bitmapToMat(image,dst);
         MainActivity.convertGray(src.getNativeObjAddr(),dst.getNativeObjAddr());
         Utils.matToBitmap(dst,image);
+        src.release();
+        dst.release();
         // Tesss func;
         processImage();
     }

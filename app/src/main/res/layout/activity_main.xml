@@ -10,14 +10,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="332dp"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/ImageContainer">
+        android:layout_height="250dp"
+        android:id="@+id/ImageContainer"
+        android:background="@android:color/darker_gray">
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:src="@drawable/sam" />
+            tools:src="@drawable/abc" />
     </RelativeLayout>
 
     <Button
