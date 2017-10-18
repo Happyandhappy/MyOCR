@@ -5,7 +5,6 @@ Developed by Happyandhappy
 2017/10/17 Using Teesseract and OpenCV lib
  */
 
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,11 +16,8 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.Uri;
-import android.os.Debug;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,23 +25,16 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.googlecode.tesseract.android.TessBaseAPI;
-
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,9 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static org.opencv.imgproc.Imgproc.GaussianBlur;
-import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
-import static org.opencv.imgproc.Imgproc.threshold;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "MainActivity";
@@ -64,16 +50,14 @@ public class MainActivity extends AppCompatActivity {
     private TessBaseAPI mTess;
     String datapath = "";
     ImageView imageView;
-    TextView detect_text_button;
+    Button detect_text_button;
 
     Mat mat=new Mat();
-
     static {
         System.loadLibrary("native");
     }
+
     public native static int convertGray(long matAddrRgba, long matAddrGray);
-
-
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -87,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -132,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 45);
         }
 
-        detect_text_button=(TextView) findViewById(R.id.OCRbutton);
+        detect_text_button=(Button) findViewById(R.id.OCRbutton);
         imageView = (ImageView)findViewById(R.id.imageView);
         detect_text_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,17 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, IMG_RESULT);
             }
         });
-
         //initialize Tesseract API
         String language = "eng";
         datapath = getFilesDir()+ "/tesseract/";
         mTess = new TessBaseAPI();
-
         checkFile(new File(datapath + "tessdata/"));
-
         mTess.init(datapath, language);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -172,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 //Image Resizing
                 //image = scaleBitmap(image,1296,2304);
                 convertBinary();
-
             }
         } catch (Exception e) {
             Toast.makeText(this, "Please try again", Toast.LENGTH_LONG).show();
@@ -199,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i=0;i<string_length;i++) Result+=stringArray[i];
         OCRTextView.setText(Result);
-        //OCRTextView.setText(OCRresult);
         // set image from Gallery to loaded_image
         imageView.setImageBitmap(image);
     }
@@ -255,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
         Utils.bitmapToMat(image,dst);
         MainActivity.convertGray(src.getNativeObjAddr(),dst.getNativeObjAddr());
         Utils.matToBitmap(dst,image);
-
         // Tesss func;
         processImage();
     }
@@ -268,6 +244,4 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawBitmap(bitmap, m, new Paint());
         return output;
     }
-
-
 }
