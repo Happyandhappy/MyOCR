@@ -103,6 +103,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Requestion of External storage read/write permission using Code  (Can set it using manifest permission)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 333) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                detect_text_button.setEnabled(true);
+            } else {
+                detect_text_button.setEnabled(false);
+            }
+        } else if(requestCode == 334) {
+
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,20 +153,6 @@ public class MainActivity extends AppCompatActivity {
         mTess.init(datapath, language);
     }
 
-    // Requestion of External storage read/write permission using Code  (Can set it using manifest permission)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 333) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                detect_text_button.setEnabled(true);
-            } else {
-                detect_text_button.setEnabled(false);
-            }
-        } else if(requestCode == 334) {
-
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -168,16 +169,10 @@ public class MainActivity extends AppCompatActivity {
                 String ImageDecode = cursor.getString(columnIndex);
                 cursor.close();
                 image = BitmapFactory.decodeFile(ImageDecode);
-
                 //Image Resizing
-                image = scaleBitmap(image,1292,2304);
+                //image = scaleBitmap(image,1296,2304);
+                convertBinary();
 
-                // set image from Gallery to loaded_image
-                imageView.setImageBitmap(convertBinary(image));
-
-                // Tesss func;
-                processImage();
-                convertBinary(image);
             }
         } catch (Exception e) {
             Toast.makeText(this, "Please try again", Toast.LENGTH_LONG).show();
@@ -186,13 +181,27 @@ public class MainActivity extends AppCompatActivity {
 
     public void processImage(){
         String OCRresult = null;
-        mTess.setImage(convertBinary(image));
+        mTess.setImage(image);
         OCRresult = mTess.getUTF8Text();
         TextView OCRTextView = (TextView) findViewById(R.id.OCRTextView);
-
         OCRTextView.setMovementMethod(new ScrollingMovementMethod());  // Scrolling setup of TextView
 
-        OCRTextView.setText(OCRresult);
+        int string_length;
+        char[] charArray = OCRresult.toCharArray();
+        string_length=charArray.length;
+        String[] stringArray=new String[string_length];
+        String Result="";
+        for (int i=0;i<string_length;i++) stringArray[i]=String.valueOf(charArray[i]);
+
+        for (int i=0;i< string_length-1;i++){
+            if (charArray[i]=='\n' && charArray[i+1]=='l') stringArray[i+1]=" Bullet :";
+        }
+
+        for (int i=0;i<string_length;i++) Result+=stringArray[i];
+        OCRTextView.setText(Result);
+        //OCRTextView.setText(OCRresult);
+        // set image from Gallery to loaded_image
+        imageView.setImageBitmap(image);
     }
 
     private void checkFile(File dir) {
@@ -239,18 +248,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap convertBinary(Bitmap img){
+    private void convertBinary(){
         Mat src = new Mat();
         Mat dst = new Mat();
-        Utils.bitmapToMat(img,src);
-        Utils.bitmapToMat(img,dst);
+        Utils.bitmapToMat(image,src);
+        Utils.bitmapToMat(image,dst);
         MainActivity.convertGray(src.getNativeObjAddr(),dst.getNativeObjAddr());
-/*        Imgproc.cvtColor(src,src, Imgproc.COLOR_BGR2GRAY);
-        GaussianBlur(src,src,new Size(3,3),0);
-//        adaptiveThreshold(src,src,255,ADAPTIVE_THRESH_GAUSSIAN_C,THRESH_BINARY,3,1);
-        threshold(src,src,100,255,THRESH_BINARY);*/
-        Utils.matToBitmap(dst,img);
-        return img;
+        Utils.matToBitmap(dst,image);
+
+        // Tesss func;
+        processImage();
     }
 
     public static Bitmap scaleBitmap(Bitmap bitmap, int wantedWidth, int wantedHeight) {

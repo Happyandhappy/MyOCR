@@ -12,7 +12,14 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="false"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
+        android:debuggable="true"
+
+
+        android:theme="@style/AppTheme">
+        <meta-data
+        android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="ocr" />
+
         <activity android:name=".MainActivity" >
     <intent-filter>
         <action android:name="android.intent.action.MAIN" />
