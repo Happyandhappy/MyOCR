@@ -52,8 +52,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.GaussianBlur;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
@@ -68,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     TextView detect_text_button;
 
+    Mat mat=new Mat();
+
+    static {
+        System.loadLibrary("native");
+    }
+    public native static int convertGray(long matAddrRgba, long matAddrGray);
 
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -87,12 +91,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         if (!OpenCVLoader.initDebug())
         {
             Log.d("OpenCV", "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -103,6 +101,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d("OpenCV", "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 45);
@@ -236,12 +241,15 @@ public class MainActivity extends AppCompatActivity {
 
     private Bitmap convertBinary(Bitmap img){
         Mat src = new Mat();
+        Mat dst = new Mat();
         Utils.bitmapToMat(img,src);
-        Imgproc.cvtColor(src,src, Imgproc.COLOR_BGR2GRAY);
+        Utils.bitmapToMat(img,dst);
+        MainActivity.convertGray(src.getNativeObjAddr(),dst.getNativeObjAddr());
+/*        Imgproc.cvtColor(src,src, Imgproc.COLOR_BGR2GRAY);
         GaussianBlur(src,src,new Size(3,3),0);
 //        adaptiveThreshold(src,src,255,ADAPTIVE_THRESH_GAUSSIAN_C,THRESH_BINARY,3,1);
-        threshold(src,src,100,255,THRESH_BINARY);
-        Utils.matToBitmap(src,img);
+        threshold(src,src,100,255,THRESH_BINARY);*/
+        Utils.matToBitmap(dst,img);
         return img;
     }
 

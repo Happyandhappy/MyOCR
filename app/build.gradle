@@ -1,22 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
-
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "com.imperialsoupgmail.tesseractexample"
-        minSdkVersion 21
-        targetSdkVersion 23
+        applicationId "com.myocr.happyandhappy.ocr1"
+        minSdkVersion 15
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-
-        ndk{
-            moduleName ="MyOpencvLibs"
-        }
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    sourceSets.main.jni.srcDirs = []
+
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
-        commandLine "C:\\Users\\Happyandhappy\\AppData\\Local\\Android\\Sdk\\ndk-bundle/ndk-build.cmd",
+        def ndkDir = "C:/Users/Happyandhappy/AppData/Local/Android/sdk/ndk-bundle"
+        commandLine "$ndkDir/ndk-build.cmd",
                 'NDK_PROJECT_PATH=build/intermediates/ndk',
                 'NDK_LIBS_OUT=src/main/jniLibs',
                 'APP_BUILD_SCRIPT=src/main/jni/Android.mk',
@@ -31,9 +30,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable = true
+            jniDebuggable true
+        }
     }
-    sourceSets { main { jni.srcDirs = []
-        jniLibs.srcDir 'src/main/jniLibs' } }
 }
 
 dependencies {
