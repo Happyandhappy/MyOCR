@@ -170,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
         String Result="";
         for (int i=0;i<string_length;i++) stringArray[i]=String.valueOf(charArray[i]);
 
-        for (int i=0;i< string_length-1;i++){
-            if (charArray[i]=='\n' && charArray[i+1]=='l') stringArray[i+1]=" Bullet :";
+        for (int i=1;i< string_length-1;i++){
+            if (charArray[i-1]=='\n' && (charArray[i]!='a' && charArray[i]!='A') && charArray[i+1]==' ') stringArray[i]=" Bullet :";
         }
 
         for (int i=0;i<string_length;i++) Result+=stringArray[i];

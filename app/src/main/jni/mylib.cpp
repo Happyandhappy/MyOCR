@@ -6,7 +6,7 @@
 int toGray(Mat img, Mat& gray ){
 
     cvtColor(img,gray,CV_RGBA2GRAY);
-    GaussianBlur(gray,gray,Size(3,3),0);
+    //GaussianBlur(gray,gray,Size(3,3),0);
     threshold(gray,gray,100,255,THRESH_BINARY);
 
 
