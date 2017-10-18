@@ -26,6 +26,7 @@ int toGray(Mat img, Mat& gray ){
             gray.at<uchar>(j,i)=255;
     }
     return 1;
+
 }
 
 JNIEXPORT jint JNICALL Java_com_imperialsoupgmail_tesseractexample_MainActivity_convertGray
